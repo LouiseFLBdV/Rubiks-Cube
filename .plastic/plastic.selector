@@ -1,0 +1,4 @@
+repository "Rubiks-Cube@CoffeeAddictGames@cloud"
+  path "/"
+    br "/main"
+    co "/main"
