@@ -1,0 +1,18 @@
+{
+    "name": "RubicksCubeCreatorEditor",
+    "rootNamespace": "RubicksCubeCreatorEditor",
+    "references": [
+        "GUID:4ac7f8689661a4df3bbf22d489658a65"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
