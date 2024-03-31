@@ -1,16 +1,24 @@
 public class PlayerData
 {
-    public string userName;
-    public int bestScore;
-    
-    public PlayerData(string userName, int bestScore)
+    private string m_UserName;
+    private int m_BestScore;
+    private int m_Money;
+
+    public string UserName
     {
-        this.bestScore = bestScore;
-        this.userName = userName;
+        get { return m_UserName; }
+        set { m_UserName = value; }
     }
 
-    public override string ToString()
+    public int BestScore
     {
-        return $"{nameof(userName)}: {userName}, {nameof(bestScore)}: {bestScore}";
+        get { return m_BestScore; }
+        set { m_BestScore = value; }
+    }
+
+    public int Money
+    {
+        get { return m_Money; }
+        set { m_Money = value; }
     }
 }

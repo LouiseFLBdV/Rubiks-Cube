@@ -16,7 +16,7 @@ public class DisplayHighscores : MonoBehaviour
         myScores = GetComponent<LeaderBoardManager>();
         StartCoroutine("RefreshHighscores");
     }
-    public void SetScoresToMenu(PlayerData[] highscoreList)
+    public void SetScoresToMenu(PlayerLeaderboardData[] highscoreList)
     {
         for (int i = 0; i < rNames.Length;i ++)
         {

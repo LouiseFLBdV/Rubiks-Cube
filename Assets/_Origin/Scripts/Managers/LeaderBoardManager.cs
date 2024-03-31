@@ -9,8 +9,8 @@ public class LeaderBoardManager : MonoBehaviour
     public static LeaderBoardManager Instance;
     
     private string leaderboardId = "Rubiks_Leaderboard";
-    public UnityEvent<PlayerData> OnPlayerDataLoaded;
-    public UnityEvent<List<PlayerData>> OnPlayersDataLoaded;
+    public UnityEvent<PlayerLeaderboardData> OnPlayerDataLoaded;
+    public UnityEvent<List<PlayerLeaderboardData>> OnPlayersDataLoaded;
     void Awake()
     {
         if (Instance == null)
@@ -44,13 +44,13 @@ public class LeaderBoardManager : MonoBehaviour
 
     public async void AddScoreToLeaderBoard(string username, int score)
     {
-        PlayerData playerData = new PlayerData(username, score);
+        PlayerLeaderboardData playerLeaderboardData = new PlayerLeaderboardData(username, score);
         
         var playerEntry = await LeaderboardsService.Instance
             .AddPlayerScoreAsync(
                 leaderboardId,
                 score,
-                new AddPlayerScoreOptions { Metadata = playerData});
+                new AddPlayerScoreOptions { Metadata = playerLeaderboardData});
     }
 
     public async void GetPlayerScoreFromLeaderBoard()
@@ -60,8 +60,8 @@ public class LeaderBoardManager : MonoBehaviour
                 leaderboardId,
                 new GetPlayerScoreOptions { IncludeMetadata = true });
         
-        PlayerData currentPlayer = JsonConvert.DeserializeObject<PlayerData>(scoreResponse.Metadata.ToString());
-        OnPlayerDataLoaded.Invoke(JsonConvert.DeserializeObject<PlayerData>(scoreResponse.Metadata));
+        PlayerLeaderboardData currentPlayerLeaderboard = JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata.ToString());
+        OnPlayerDataLoaded.Invoke(JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata));
     }
     
     public async void GetAllScoresFromLeaderBoard()
@@ -70,10 +70,10 @@ public class LeaderBoardManager : MonoBehaviour
             .GetScoresAsync(
                 leaderboardId,
                 new GetScoresOptions { IncludeMetadata = true });
-        List<PlayerData> playersData = new List<PlayerData>();
+        List<PlayerLeaderboardData> playersData = new List<PlayerLeaderboardData>();
         foreach (var entry in scoreResponse.Results)
         {
-            playersData.Add(JsonConvert.DeserializeObject<PlayerData>(entry.Metadata));
+            playersData.Add(JsonConvert.DeserializeObject<PlayerLeaderboardData>(entry.Metadata));
         }
         OnPlayersDataLoaded.Invoke(playersData);
     }

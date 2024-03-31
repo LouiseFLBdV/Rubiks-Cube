@@ -45,7 +45,10 @@ public class GameUIController : MonoBehaviour
     
     void InvokeRandomMove()
     {
-        m_Cube.PlayRandomMove();
+        if (m_Cube != null && m_Cube.gameObject.activeInHierarchy)
+        {
+            m_Cube.PlayRandomMove();
+        }
     }
 
     void OnDestroy()

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +10,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
     public GameState CurrentState;
 
-    public List<PlayerData> playersData;
+    public List<PlayerLeaderboardData> playersData;
     public int currentScore;
     public int bestScore;
     public string userName;
@@ -39,13 +37,13 @@ public class GameManager : MonoBehaviour
         LeaderBoardManager.Instance.OnPlayerDataLoaded.AddListener(GetPlayersFromLeaderBoard);
     }
 
-    private void GetPlayersFromLeaderBoard(List<PlayerData> playersData)
+    private void GetPlayersFromLeaderBoard(List<PlayerLeaderboardData> playersData)
     {
         this.playersData = playersData;
     }
-    private void GetPlayersFromLeaderBoard(PlayerData playerData)
+    private void GetPlayersFromLeaderBoard(PlayerLeaderboardData playerLeaderboardData)
     {
-        bestScore = playerData.bestScore;
+        bestScore = playerLeaderboardData.bestScore;
     }
     
     public void ChangeGameState(GameState state)
