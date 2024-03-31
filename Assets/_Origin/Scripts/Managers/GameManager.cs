@@ -8,12 +8,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public UnityEvent<GameState> OnGameStateChanged = new UnityEvent<GameState>();
     public UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
-    public GameState CurrentState;
-
-    public List<PlayerLeaderboardData> playersData;
+    
+    // PlayerLeaderBoard and current data state
+    public List<PlayerLeaderboardData> PlayersLeaderboardData;
     public int currentScore;
-    public int bestScore;
-    public string userName;
+    public GameState CurrentState;
+    
     void Awake()
     {
         if (Instance == null)
@@ -39,11 +39,11 @@ public class GameManager : MonoBehaviour
 
     private void GetPlayersFromLeaderBoard(List<PlayerLeaderboardData> playersData)
     {
-        this.playersData = playersData;
+        this.PlayersLeaderboardData = playersData;
     }
     private void GetPlayersFromLeaderBoard(PlayerLeaderboardData playerLeaderboardData)
     {
-        bestScore = playerLeaderboardData.bestScore;
+        // bestScore = playerLeaderboardData.bestScore;
     }
     
     public void ChangeGameState(GameState state)
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
                 currentScore = 0;
                 break;
             case GameState.Win:
-                if (currentScore > bestScore)
+                if (currentScore > PlayerData.Instance.BestScore)
                 {
                     SaveScore();
                 }
@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
 
     public void SaveScore()
     {
-        Debug.LogError("CubedInvoked");
-        OnGameFinished.Invoke(userName, currentScore);
+        OnGameFinished.Invoke(PlayerData.Instance.UserName, currentScore);
     }
 }

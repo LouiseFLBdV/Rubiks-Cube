@@ -7,18 +7,6 @@ public class SaveManager : MonoBehaviour
     public UnityEvent onDataSaved;
     public UnityEvent onNoSaveData;
 
-    private PlayerData m_PlayerData;
-
-    public PlayerData PlayerData
-    {
-        get
-        {
-            if (m_PlayerData == null)
-                m_PlayerData = new PlayerData();
-            return m_PlayerData;
-        }
-    }
-
     void Awake()
     {
         if (Instance == null)
@@ -40,10 +28,10 @@ public class SaveManager : MonoBehaviour
 
     private void Initialize()
     {
-        PlayerData.UserName = PlayerPrefs.GetString("userName", "player");
-        PlayerData.BestScore = PlayerPrefs.GetInt("bestScore", 0);
-        PlayerData.Money = PlayerPrefs.GetInt("userMoney", 0);
-        if (PlayerData.UserName == "player" && PlayerData.BestScore == 0 && PlayerData.Money == 0)
+        PlayerData.Instance.UserName = PlayerPrefs.GetString("userName", "player");
+        PlayerData.Instance.BestScore = PlayerPrefs.GetInt("bestScore", 0);
+        PlayerData.Instance.Money = PlayerPrefs.GetInt("userMoney", 0);
+        if (PlayerData.Instance.UserName == "player" && PlayerData.Instance.BestScore == 0 && PlayerData.Instance.Money == 0)
         {
             Debug.Log(PlayerPrefs.GetString("userName", "player"));
             onNoSaveData?.Invoke();
@@ -52,9 +40,9 @@ public class SaveManager : MonoBehaviour
 
     public void SaveData()
     {
-        PlayerPrefs.SetString("userName", PlayerData.UserName);
-        PlayerPrefs.SetInt("bestScore", PlayerData.BestScore);
-        PlayerPrefs.SetInt("userMoney", PlayerData.Money);
+        PlayerPrefs.SetString("userName", PlayerData.Instance.UserName);
+        PlayerPrefs.SetInt("bestScore", PlayerData.Instance.BestScore);
+        PlayerPrefs.SetInt("userMoney", PlayerData.Instance.Money);
         PlayerPrefs.Save();
         onDataSaved?.Invoke();
     }
