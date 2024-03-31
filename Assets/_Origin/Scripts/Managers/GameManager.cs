@@ -8,9 +8,9 @@ using UnityEngine.SocialPlatforms.Impl;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public static UnityEvent<GameState> OnGameStateChanged = new UnityEvent<GameState>();
-    public static UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
-    public static GameState CurrentState;
+    public UnityEvent<GameState> OnGameStateChanged = new UnityEvent<GameState>();
+    public UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
+    public GameState CurrentState;
 
     public List<PlayerData> playersData;
     public int currentScore;

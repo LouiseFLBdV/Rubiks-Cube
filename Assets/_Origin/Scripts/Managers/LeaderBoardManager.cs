@@ -27,7 +27,7 @@ public class LeaderBoardManager : MonoBehaviour
     
     private void Start()
     {
-        GameManager.OnGameFinished.AddListener((username, score) =>
+        GameManager.Instance.OnGameFinished.AddListener((username, score) =>
         {
             if (AuthenticationManager.Instance.IsAuthenticated)
             {
