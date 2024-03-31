@@ -51,7 +51,6 @@ public class LeaderBoardManager : MonoBehaviour
                 leaderboardId,
                 score,
                 new AddPlayerScoreOptions { Metadata = playerData});
-        Debug.Log(JsonConvert.SerializeObject(playerEntry));
     }
 
     public async void GetPlayerScoreFromLeaderBoard()

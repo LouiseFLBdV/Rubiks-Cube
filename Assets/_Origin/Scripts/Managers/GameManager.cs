@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
     }
     private void GetPlayersFromLeaderBoard(PlayerData playerData)
     {
-        Debug.LogError(playerData);
         bestScore = playerData.bestScore;
     }
     
@@ -86,6 +85,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveScore()
     {
+        Debug.LogError("CubedInvoked");
         OnGameFinished.Invoke(userName, currentScore);
     }
 }
