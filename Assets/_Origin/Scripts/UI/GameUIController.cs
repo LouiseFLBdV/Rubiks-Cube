@@ -1,18 +1,17 @@
+using System.Collections.Generic;
 using RubicksCubeCreator;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GameUIController : MonoBehaviour
 {
     [SerializeField] private float rotateCooldown = 3;
     [SerializeField] private LayerMask m_InputLayerMask = Physics.DefaultRaycastLayers;
-    [SerializeField] private Text userName; 
-   
+    [SerializeField] private Text userName;
+    [SerializeField] private List<GameObject> popupList;
     private Cube m_Cube;
     private Camera m_Camera;
-    
+
     void Start()
     {
         m_Camera = FindObjectOfType<Camera>();
@@ -22,7 +21,7 @@ public class GameUIController : MonoBehaviour
             InvokeRepeating("InvokeRandomMove", 0f, rotateCooldown);
         }
     }
-    
+
     void InvokeRandomMove()
     {
         if (m_Cube != null && m_Cube.gameObject.activeInHierarchy)
@@ -30,7 +29,7 @@ public class GameUIController : MonoBehaviour
             m_Cube.PlayRandomMove();
         }
     }
-    
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -38,7 +37,7 @@ public class GameUIController : MonoBehaviour
             CubePlayButton();
         }
     }
-    
+
     public void CubePlayButton()
     {
         RaycastHit hit;
@@ -59,7 +58,27 @@ public class GameUIController : MonoBehaviour
             PlayerData.Instance.UserName = userName.text;
         }
     }
-    
+
+    public void SelectPopup(GameObject gameObject)
+    {
+        foreach (var popup in popupList)
+        {
+            popup.gameObject.SetActive(false);
+        }
+        gameObject.SetActive(true);
+        m_Cube.gameObject.SetActive(false);
+    }
+
+    public void ClosePopup()
+    {
+        foreach (var popup in popupList)
+        {
+            popup.gameObject.SetActive(false);
+        }
+
+        m_Cube.gameObject.SetActive(true);
+    }
+
     void OnDestroy()
     {
         CancelInvoke("InvokeRandomMove"); // Остановка повторяющегося вызова при уничтожении объекта
