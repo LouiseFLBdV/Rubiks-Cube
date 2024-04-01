@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public List<PlayerLeaderboardWrapper> PlayersLeaderboardData;
     public int currentScore;
     public int playerCounter;
+    public int tipsUsed;
     public GameState CurrentState;
 
     void Awake()
@@ -55,23 +56,17 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Menu:
                 SceneManager.LoadScene(0);
-                currentScore = 0;
-                playerCounter = 0;
+                InitializeCurrentData();
                 break;
             case GameState.Game:
                 SceneManager.LoadScene(1);
-                currentScore = 0;
-                playerCounter = 0;
+                InitializeCurrentData();
                 break;
             case GameState.Lose:
-                currentScore = 0;
-                playerCounter = 0;
+                InitializeCurrentData();
                 break;
             case GameState.Win:
-                OnGameFinished.Invoke(PlayerData.Instance.name, currentScore);
-
-                currentScore = 0;
-                playerCounter = 0;
+                WinController();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
@@ -81,6 +76,21 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(state);
     }
 
+    private void InitializeCurrentData()
+    {
+        currentScore = 0;
+        playerCounter = 0;
+        tipsUsed = 0;
+    }
+
+    private void WinController()
+    {
+        // Todo implement a better score calculation logic
+        currentScore = 123456 / (tipsUsed + 1) / playerCounter;
+        OnGameFinished.Invoke(PlayerData.Instance.UserName, currentScore);
+        Debug.Log(currentScore);
+    }
+    
     public enum GameState
     {
         Menu,

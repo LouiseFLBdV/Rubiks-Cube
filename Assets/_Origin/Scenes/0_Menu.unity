@@ -1234,6 +1234,7 @@ MonoBehaviour:
       m_Calls: []
   currentScore: 0
   playerCounter: 0
+  tipsUsed: 0
   CurrentState: 0
 --- !u!1 &604317303
 GameObject:
@@ -2383,7 +2384,7 @@ GameObject:
   - component: {fileID: 932365493}
   - component: {fileID: 932365495}
   m_Layer: 0
-  m_Name: GameUIController
+  m_Name: MenuUIController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3606,7 +3607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5799871359950028345, guid: 1f2172d1e25dc434b8eaf123527f4335, type: 3}
       propertyPath: m_Text
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5799871359950028349, guid: 1f2172d1e25dc434b8eaf123527f4335, type: 3}
       propertyPath: m_Name

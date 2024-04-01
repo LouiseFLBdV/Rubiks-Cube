@@ -23,6 +23,10 @@ public class MenuUIController : MonoBehaviour
         }
         SaveManager.Instance.onLoadedSaveData.AddListener(RenderMoney);
         PlayerData.Instance.onPlayerMoneyChanged.AddListener(RenderMoney);
+        if (SaveManager.Instance.isDataLoaded)
+        {
+            RenderMoney();
+        }
     }
 
     private void RenderMoney()

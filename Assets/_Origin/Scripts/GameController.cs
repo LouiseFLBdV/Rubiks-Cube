@@ -18,8 +18,9 @@ public class GameController : MonoBehaviour
         SaveManager.Instance.onLoadedSaveData.AddListener(RenderPlayerTips);
         PlayerData.Instance.onPlayerTipsChanged.AddListener(RenderPlayerTips);
         m_Cube.onShuffleEnd.AddListener(GameStart);
+        // GameStart();
         m_Cube.OnCubeSolved.AddListener(CubeSolved);
-        GameManager.Instance.OnGameFinished.AddListener(RenderWinPopup);
+        Initialize();
     }
 
     private void Initialize()
@@ -55,7 +56,6 @@ public class GameController : MonoBehaviour
 
     public void RenderPlayerTips()
     {
-        Debug.LogError(1);
         playerTips.text = PlayerData.Instance.Tips.ToString();
         if (PlayerData.Instance.Tips <= 0)
         {
@@ -65,11 +65,6 @@ public class GameController : MonoBehaviour
         {
             tipsButton.interactable = true;
         }
-    }
-
-    public void RenderWinPopup(string username, int playerScore)
-    {
-        
     }
     
     public void MenuButtonClicked()
@@ -87,6 +82,7 @@ public class GameController : MonoBehaviour
         if (PlayerData.Instance.Tips >= 0)
         {
             PlayerData.Instance.Tips -= 1;
+            GameManager.Instance.tipsUsed++;
             m_Cube.SolveOneStep();
         }
     }
@@ -98,6 +94,5 @@ public class GameController : MonoBehaviour
         m_Cube.OnCubeChanged.RemoveListener(CubeChanged);
         m_Cube.onShuffleEnd.RemoveListener(GameStart);
         m_Cube.OnCubeSolved.RemoveListener(CubeSolved);
-        GameManager.Instance.OnGameFinished.RemoveListener(RenderWinPopup);
     }
 }

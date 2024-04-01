@@ -75,7 +75,6 @@ namespace RubicksCubeCreator.Demo
                     Vector3 direction = m_MouseHitStart - currentHit.point;
                     Sides hittedSide = m_RubicksCube.GetClosestSideWithNormal(m_RubicksCube.transform.TransformPoint(m_RubicksCube.transform.position - m_MouseHitStart.normalized));
                     Sides towards = m_RubicksCube.GetClosestSideWithNormal(m_RubicksCube.transform.TransformPoint(direction));
-                    Debug.Log("Hitted Side: " + hittedSide + " Towards: " + towards);
                     m_RubicksCube.PlayMove(hittedSide, towards, m_Block);
                     ResetInput();
                 }
