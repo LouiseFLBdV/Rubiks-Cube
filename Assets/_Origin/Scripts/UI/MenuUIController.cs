@@ -4,7 +4,7 @@ using RubicksCubeCreator;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameUIController : MonoBehaviour
+public class MenuUIController : MonoBehaviour
 {
     [SerializeField] private float rotateCooldown = 3;
     [SerializeField] private LayerMask m_InputLayerMask = Physics.DefaultRaycastLayers;
@@ -55,7 +55,7 @@ public class GameUIController : MonoBehaviour
         {
             if (hit.collider.CompareTag("RubicksCube"))
             {
-                Debug.Log(hit.collider.name);
+                GameManager.Instance.ChangeGameState(GameManager.GameState.Game);
             }
         }
     }

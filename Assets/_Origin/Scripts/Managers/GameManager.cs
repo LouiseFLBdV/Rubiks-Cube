@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     // PlayerLeaderBoard and current data state
     public List<PlayerLeaderboardWrapper> PlayersLeaderboardData;
     public int currentScore;
+    public int playerCounter;
     public GameState CurrentState;
     
     void Awake()
@@ -31,10 +33,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        CurrentState = GameState.Menu;
-        // ChangeGameState(GameState.Menu);
         LeaderBoardManager.Instance.OnPlayersDataLoaded.AddListener(GetPlayersFromLeaderBoard);
         LeaderBoardManager.Instance.OnPlayerDataLoaded.AddListener(GetPlayersFromLeaderBoard);
+        ChangeGameState(GameState.Menu);
     }
 
     private void GetPlayersFromLeaderBoard(List<PlayerLeaderboardWrapper> playersData)
@@ -52,19 +53,26 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case GameState.Menu:
+                SceneManager.LoadScene(0);
                 currentScore = 0;
+                playerCounter = 0;
                 break;
             case GameState.Game:
+                SceneManager.LoadScene(1);
                 currentScore = 0;
+                playerCounter = 0;
                 break;
             case GameState.Lose:
                 currentScore = 0;
+                playerCounter = 0;
                 break;
             case GameState.Win:
                 if (currentScore > PlayerData.Instance.BestScore)
                 {
                     SaveScore();
                 }
+                currentScore = 0;
+                playerCounter = 0;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
