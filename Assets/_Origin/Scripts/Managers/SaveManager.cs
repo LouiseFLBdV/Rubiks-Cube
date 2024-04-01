@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,7 +8,8 @@ public class SaveManager : MonoBehaviour
     public UnityEvent onDataSaved = new UnityEvent();
     public UnityEvent onNoSaveData = new UnityEvent();
     public UnityEvent onLoadedSaveData = new UnityEvent();
-
+    public bool isDataLoaded = false;
+    
     void Awake()
     {
         if (Instance == null)
@@ -27,23 +29,26 @@ public class SaveManager : MonoBehaviour
         PlayerData.Instance.onPlayerMoneyChanged.AddListener(SaveData);
         PlayerData.Instance.onPlayerUsernameChanged.AddListener(SaveData);
         PlayerData.Instance.onPlayerBestScoreChanged.AddListener(SaveData);
-        Initialize();
+        PlayerData.Instance.onPlayerTipsChanged.AddListener(SaveData);
+        LoadPlayerData();
     }
 
-    private void Initialize()
+    public void LoadPlayerData()
     {
         if (PlayerPrefs.HasKey("username"))
         {
             PlayerData.Instance.SetPlayerData(PlayerPrefs.GetString("username", "player"),
-                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("userMoney", 0));
+                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("money", 0), PlayerPrefs.GetInt("tips", 0));
         }
         else
         {
             PlayerPrefs.DeleteAll();
             PlayerData.Instance.SetPlayerData(PlayerPrefs.GetString("username", "player"),
-                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("userMoney", 0));
+                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("money", 0), PlayerPrefs.GetInt("tips", 0));
             onNoSaveData?.Invoke();
         }
+
+        isDataLoaded = true;
         onLoadedSaveData?.Invoke();
     }
 
@@ -51,8 +56,17 @@ public class SaveManager : MonoBehaviour
     {
         PlayerPrefs.SetString("username", PlayerData.Instance.UserName);
         PlayerPrefs.SetInt("bestScore", PlayerData.Instance.BestScore);
-        PlayerPrefs.SetInt("userMoney", PlayerData.Instance.Money);
+        PlayerPrefs.SetInt("money", PlayerData.Instance.Money);
+        PlayerPrefs.SetInt("tips", PlayerData.Instance.Tips);
         PlayerPrefs.Save();
         onDataSaved?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        PlayerData.Instance.onPlayerMoneyChanged.RemoveListener(SaveData);
+        PlayerData.Instance.onPlayerUsernameChanged.RemoveListener(SaveData);
+        PlayerData.Instance.onPlayerBestScoreChanged.RemoveListener(SaveData);
+        PlayerData.Instance.onPlayerTipsChanged.RemoveListener(SaveData);
     }
 }

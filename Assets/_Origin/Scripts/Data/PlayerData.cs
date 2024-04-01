@@ -7,6 +7,7 @@ public class PlayerData: MonoBehaviour
     public UnityEvent onPlayerUsernameChanged = new UnityEvent();
     public UnityEvent onPlayerBestScoreChanged = new UnityEvent();
     public UnityEvent onPlayerMoneyChanged = new UnityEvent();
+    public UnityEvent onPlayerTipsChanged = new UnityEvent();
     void Awake()
     {
         if (Instance == null)
@@ -24,6 +25,7 @@ public class PlayerData: MonoBehaviour
     private string m_UserName;
     private int m_BestScore;
     private int m_Money;
+    private int m_Tips;
 
     public string UserName
     {
@@ -54,11 +56,21 @@ public class PlayerData: MonoBehaviour
             onPlayerMoneyChanged.Invoke();
         }
     }
+    public int Tips
+    {
+        get { return m_Tips; }
+        set
+        {
+            m_Tips = value;
+            onPlayerTipsChanged.Invoke();
+        }
+    }
 
-    public void SetPlayerData(string userName, int bestScore, int money)
+    public void SetPlayerData(string userName, int bestScore, int money, int tips)
     {
         this.m_UserName = userName;
         this.m_BestScore = bestScore;
         this.m_Money = money;
+        this.m_Tips = tips;
     }
 }

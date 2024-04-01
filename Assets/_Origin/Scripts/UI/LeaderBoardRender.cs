@@ -27,4 +27,10 @@ public class LeaderBoardRender : MonoBehaviour
     {
         playerRankTemplate.GetComponent<PlayerRankUI>().SetPlayerLeaderboardData(playerRank);
     }
+
+    private void OnDestroy()
+    {
+        LeaderBoardManager.Instance.OnPlayersDataLoaded.RemoveListener(RenderLeaderBoard);
+        LeaderBoardManager.Instance.OnPlayerDataLoaded.RemoveListener(RenderPlayerRank);
+    }
 }

@@ -14,6 +14,7 @@ namespace RubicksCubeCreator
         public UnityEvent OnCubeChanged;
 
         public UnityEvent OnCubeSolved;
+        public UnityEvent onShuffleEnd = new UnityEvent();
 
         [SerializeField] private CubePreset m_Preset;
 
@@ -164,6 +165,7 @@ namespace RubicksCubeCreator
             PlayMove(CubeMove.None, false);
             yield return null;
             m_CanMove = true;
+            onShuffleEnd.Invoke();
         }
 
         /// <summary>
@@ -193,6 +195,19 @@ namespace RubicksCubeCreator
             }
             m_CanMove = true;
             cubeMoves.Clear();
+        }
+        public void SolveOneStep()
+        {
+            m_CanMove = false;
+            StartCoroutine(SolveOneStepCoroutine());
+        }
+        
+        private IEnumerator SolveOneStepCoroutine()
+        {
+            UndoMove();
+            yield return new WaitForSeconds(m_RotationTime);
+            
+            m_CanMove = true;
         }
 
 #if UNITY_EDITOR

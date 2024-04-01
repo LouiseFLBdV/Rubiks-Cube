@@ -259,7 +259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3605972572537842273, guid: 75e670cb45573924fb52b4b696e87a88, type: 3}
       propertyPath: m_FontData.m_FontSize
-      value: 40
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3605972572574724161, guid: 75e670cb45573924fb52b4b696e87a88, type: 3}
       propertyPath: m_Name
@@ -1233,6 +1233,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   currentScore: 0
+  playerCounter: 0
   CurrentState: 0
 --- !u!1 &604317303
 GameObject:
@@ -3722,6 +3723,7 @@ MonoBehaviour:
   onLoadedSaveData:
     m_PersistentCalls:
       m_Calls: []
+  isDataLoaded: 0
 --- !u!1001 &1668398075
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4102,6 +4104,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onPlayerMoneyChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerTipsChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1730490290

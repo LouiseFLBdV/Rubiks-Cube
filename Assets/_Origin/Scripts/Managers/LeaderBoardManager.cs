@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Unity.Services.Leaderboards;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,19 +28,9 @@ public class LeaderBoardManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnGameFinished.AddListener((username, score) =>
-        {
-            if (AuthenticationManager.Instance.IsAuthenticated)
-            {
-                AddScoreToLeaderBoard(username, score);
-            }
-            else
-            {
-                Debug.LogError("User is not authenticated. Cannot upload score.");
-            }
-        });
         AuthenticationManager.Instance.OnAuthenticated.AddListener(GetPlayerScoreFromLeaderBoard);
         AuthenticationManager.Instance.OnAuthenticated.AddListener(GetAllScoresFromLeaderBoard);
+        GameManager.Instance.OnGameFinished.AddListener(AddScoreToLeaderBoard);
     }
     
     public async void AddScoreToLeaderBoard(string username, int score)
@@ -88,5 +77,13 @@ public class LeaderBoardManager : MonoBehaviour
         }
 
         OnPlayersDataLoaded.Invoke(playersData);
+    }
+
+    private void OnDestroy()
+    {
+        AuthenticationManager.Instance.OnAuthenticated.RemoveListener(GetPlayerScoreFromLeaderBoard);
+        AuthenticationManager.Instance.OnAuthenticated.RemoveListener(GetAllScoresFromLeaderBoard);
+        GameManager.Instance.OnGameFinished.RemoveListener(AddScoreToLeaderBoard);
+
     }
 }

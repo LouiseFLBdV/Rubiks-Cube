@@ -8,14 +8,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public UnityEvent<GameState> OnGameStateChanged = new UnityEvent<GameState>();
-    public UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
-    
+    public UnityEvent<string, int> OnGameFinished = new UnityEvent<string, int>();
+
     // PlayerLeaderBoard and current data state
     public List<PlayerLeaderboardWrapper> PlayersLeaderboardData;
     public int currentScore;
     public int playerCounter;
     public GameState CurrentState;
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         DontDestroyOnLoad(gameObject);
     }
 
@@ -42,11 +42,12 @@ public class GameManager : MonoBehaviour
     {
         this.PlayersLeaderboardData = playersData;
     }
+
     private void GetPlayersFromLeaderBoard(PlayerLeaderboardWrapper playerLeaderboardWrapper)
     {
         // bestScore = playerLeaderboardData.bestScore;
     }
-    
+
     public void ChangeGameState(GameState state)
     {
         Cursor.lockState = CursorLockMode.None;
@@ -67,30 +68,35 @@ public class GameManager : MonoBehaviour
                 playerCounter = 0;
                 break;
             case GameState.Win:
-                if (currentScore > PlayerData.Instance.BestScore)
-                {
-                    SaveScore();
-                }
+                OnGameFinished.Invoke(PlayerData.Instance.name, currentScore);
+
                 currentScore = 0;
                 playerCounter = 0;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
-        
+
+        SaveManager.Instance.LoadPlayerData();
         OnGameStateChanged?.Invoke(state);
     }
-    
+
     public enum GameState
     {
         Menu,
         Game,
         Lose,
-        Win 
+        Win
     }
 
     public void SaveScore()
     {
         OnGameFinished.Invoke(PlayerData.Instance.UserName, currentScore);
+    }
+
+    private void OnDestroy()
+    {
+        LeaderBoardManager.Instance.OnPlayersDataLoaded.RemoveListener(GetPlayersFromLeaderBoard);
+        LeaderBoardManager.Instance.OnPlayerDataLoaded.RemoveListener(GetPlayersFromLeaderBoard);
     }
 }
