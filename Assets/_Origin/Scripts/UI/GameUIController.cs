@@ -9,6 +9,7 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private float rotateCooldown = 3;
     [SerializeField] private LayerMask m_InputLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] private Text userName; 
+   
     private Cube m_Cube;
     private Camera m_Camera;
     

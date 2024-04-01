@@ -39,7 +39,7 @@ public class LeaderBoardManager : MonoBehaviour
             }
         });
         AuthenticationManager.Instance.OnAuthenticated.AddListener(GetPlayerScoreFromLeaderBoard);
-        AuthenticationManager.Instance.OnAuthenticated.AddListener(GetPlayerScoreFromLeaderBoard);
+        AuthenticationManager.Instance.OnAuthenticated.AddListener(GetAllScoresFromLeaderBoard);
     }
 
     public async void AddScoreToLeaderBoard(string username, int score)
@@ -60,7 +60,8 @@ public class LeaderBoardManager : MonoBehaviour
                 leaderboardId,
                 new GetPlayerScoreOptions { IncludeMetadata = true });
         
-        PlayerLeaderboardData currentPlayerLeaderboard = JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata.ToString());
+        PlayerLeaderboardData currentPlayerLeaderboard = JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata);
+        currentPlayerLeaderboard.rankedPosition = scoreResponse.Rank;
         OnPlayerDataLoaded.Invoke(JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata));
     }
     
@@ -73,7 +74,9 @@ public class LeaderBoardManager : MonoBehaviour
         List<PlayerLeaderboardData> playersData = new List<PlayerLeaderboardData>();
         foreach (var entry in scoreResponse.Results)
         {
-            playersData.Add(JsonConvert.DeserializeObject<PlayerLeaderboardData>(entry.Metadata));
+            PlayerLeaderboardData playerLeaderboardData = JsonConvert.DeserializeObject<PlayerLeaderboardData>(entry.Metadata);
+            playerLeaderboardData.rankedPosition = entry.Rank;
+            playersData.Add(playerLeaderboardData);
         }
         OnPlayersDataLoaded.Invoke(playersData);
     }

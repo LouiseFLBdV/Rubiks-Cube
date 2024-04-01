@@ -1796,7 +1796,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.14780942, y: 0, z: 0, w: 0.9890159}
-  m_LocalPosition: {x: -4, y: 7.5, z: -22}
+  m_LocalPosition: {x: 0, y: 10.83, z: -30.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3098,9 +3098,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79e1fed0a04640af8a26ab4943b098eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnGameStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameFinished:
+    m_PersistentCalls:
+      m_Calls: []
   currentScore: 0
-  bestScore: 0
-  userName: 
+  CurrentState: 0
 --- !u!1 &6241325376203766256
 GameObject:
   m_ObjectHideFlags: 0
@@ -4574,8 +4579,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bb253bd7daba4c90986d178cbf41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rNames: []
-  rScores: []
+  userRankTemplate: {fileID: 0}
+  playerRankTemplate: {fileID: 0}
+  userRankParentRect: {fileID: 0}
 --- !u!114 &8566917735937813095
 MonoBehaviour:
   m_ObjectHideFlags: 0

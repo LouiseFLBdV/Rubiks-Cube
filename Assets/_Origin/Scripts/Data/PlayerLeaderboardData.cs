@@ -2,6 +2,7 @@ public class PlayerLeaderboardData
 {
     public string userName;
     public int bestScore;
+    public int rankedPosition;
     
     public PlayerLeaderboardData(string userName, int bestScore)
     {
