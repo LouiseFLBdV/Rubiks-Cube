@@ -30,8 +30,8 @@ public class PlayerData: MonoBehaviour
         get { return m_UserName; }
         set
         {
-            onPlayerUsernameChanged.Invoke();
             m_UserName = value;
+            onPlayerUsernameChanged.Invoke();
         }
     }
 
@@ -40,8 +40,8 @@ public class PlayerData: MonoBehaviour
         get { return m_BestScore; }
         set
         {
-            onPlayerBestScoreChanged.Invoke();
             m_BestScore = value;
+            onPlayerBestScoreChanged.Invoke();
         }
     }
 
@@ -50,8 +50,15 @@ public class PlayerData: MonoBehaviour
         get { return m_Money; }
         set
         {
-            onPlayerMoneyChanged.Invoke();
             m_Money = value;
+            onPlayerMoneyChanged.Invoke();
         }
+    }
+
+    public void SetPlayerData(string userName, int bestScore, int money)
+    {
+        this.m_UserName = userName;
+        this.m_BestScore = bestScore;
+        this.m_Money = money;
     }
 }

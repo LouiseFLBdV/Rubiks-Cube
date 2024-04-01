@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.Sqlite;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LeaderBoardRender : MonoBehaviour
@@ -15,9 +13,9 @@ public class LeaderBoardRender : MonoBehaviour
         LeaderBoardManager.Instance.OnPlayerDataLoaded.AddListener(RenderPlayerRank);
     }
 
-    public void RenderLeaderBoard(List<PlayerLeaderboardData> playersDataLeaderBoard)
+    public void RenderLeaderBoard(List<PlayerLeaderboardWrapper> playersDataLeaderBoard)
     {
-        foreach (PlayerLeaderboardData playerDataLeaderBoard in playersDataLeaderBoard)
+        foreach (PlayerLeaderboardWrapper playerDataLeaderBoard in playersDataLeaderBoard)
         {
             var player = Instantiate(userRankTemplate);
             player.SetActive(true);
@@ -25,7 +23,7 @@ public class LeaderBoardRender : MonoBehaviour
             player.GetComponent<PlayerRankUI>().SetPlayerLeaderboardData(playerDataLeaderBoard);
         }
     }
-    public void RenderPlayerRank(PlayerLeaderboardData playerRank)
+    public void RenderPlayerRank(PlayerLeaderboardWrapper playerRank)
     {
         playerRankTemplate.GetComponent<PlayerRankUI>().SetPlayerLeaderboardData(playerRank);
     }

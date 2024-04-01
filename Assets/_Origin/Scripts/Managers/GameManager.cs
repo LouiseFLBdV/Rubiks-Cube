@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent<string,int> OnGameFinished = new UnityEvent<string, int>();
     
     // PlayerLeaderBoard and current data state
-    public List<PlayerLeaderboardData> PlayersLeaderboardData;
+    public List<PlayerLeaderboardWrapper> PlayersLeaderboardData;
     public int currentScore;
     public GameState CurrentState;
     
@@ -37,11 +37,11 @@ public class GameManager : MonoBehaviour
         LeaderBoardManager.Instance.OnPlayerDataLoaded.AddListener(GetPlayersFromLeaderBoard);
     }
 
-    private void GetPlayersFromLeaderBoard(List<PlayerLeaderboardData> playersData)
+    private void GetPlayersFromLeaderBoard(List<PlayerLeaderboardWrapper> playersData)
     {
         this.PlayersLeaderboardData = playersData;
     }
-    private void GetPlayersFromLeaderBoard(PlayerLeaderboardData playerLeaderboardData)
+    private void GetPlayersFromLeaderBoard(PlayerLeaderboardWrapper playerLeaderboardWrapper)
     {
         // bestScore = playerLeaderboardData.bestScore;
     }

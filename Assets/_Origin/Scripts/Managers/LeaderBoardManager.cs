@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Unity.Services.Leaderboards;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,10 +8,11 @@ using UnityEngine.Events;
 public class LeaderBoardManager : MonoBehaviour
 {
     public static LeaderBoardManager Instance;
-    
+
     private string leaderboardId = "Rubiks_Leaderboard";
-    public UnityEvent<PlayerLeaderboardData> OnPlayerDataLoaded;
-    public UnityEvent<List<PlayerLeaderboardData>> OnPlayersDataLoaded;
+    public UnityEvent<PlayerLeaderboardWrapper> OnPlayerDataLoaded;
+    public UnityEvent<List<PlayerLeaderboardWrapper>> OnPlayersDataLoaded;
+
     void Awake()
     {
         if (Instance == null)
@@ -24,7 +26,7 @@ public class LeaderBoardManager : MonoBehaviour
             return;
         }
     }
-    
+
     private void Start()
     {
         GameManager.Instance.OnGameFinished.AddListener((username, score) =>
@@ -41,16 +43,17 @@ public class LeaderBoardManager : MonoBehaviour
         AuthenticationManager.Instance.OnAuthenticated.AddListener(GetPlayerScoreFromLeaderBoard);
         AuthenticationManager.Instance.OnAuthenticated.AddListener(GetAllScoresFromLeaderBoard);
     }
-
+    
     public async void AddScoreToLeaderBoard(string username, int score)
     {
-        PlayerLeaderboardData playerLeaderboardData = new PlayerLeaderboardData(username, score);
-        
+        // TODO change metadata when authentication will be ready
+        var metadata = new Dictionary<string, string>();
+        metadata.Add("username", username);
         var playerEntry = await LeaderboardsService.Instance
             .AddPlayerScoreAsync(
                 leaderboardId,
                 score,
-                new AddPlayerScoreOptions { Metadata = playerLeaderboardData});
+                new AddPlayerScoreOptions { Metadata = metadata });
     }
 
     public async void GetPlayerScoreFromLeaderBoard()
@@ -59,25 +62,31 @@ public class LeaderBoardManager : MonoBehaviour
             .GetPlayerScoreAsync(
                 leaderboardId,
                 new GetPlayerScoreOptions { IncludeMetadata = true });
-        
-        PlayerLeaderboardData currentPlayerLeaderboard = JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata);
-        currentPlayerLeaderboard.rankedPosition = scoreResponse.Rank;
-        OnPlayerDataLoaded.Invoke(JsonConvert.DeserializeObject<PlayerLeaderboardData>(scoreResponse.Metadata));
+
+        PlayerLeaderboardWrapper currentPlayerLeaderboard = new PlayerLeaderboardWrapper(
+            JsonConvert.DeserializeObject<Dictionary<string, string>>(scoreResponse.Metadata)["username"],
+            (int)scoreResponse.Score,
+            scoreResponse.Rank);
+        OnPlayerDataLoaded.Invoke(currentPlayerLeaderboard);
     }
-    
+
     public async void GetAllScoresFromLeaderBoard()
     {
         var scoreResponse = await LeaderboardsService.Instance
             .GetScoresAsync(
                 leaderboardId,
                 new GetScoresOptions { IncludeMetadata = true });
-        List<PlayerLeaderboardData> playersData = new List<PlayerLeaderboardData>();
+        List<PlayerLeaderboardWrapper> playersData = new List<PlayerLeaderboardWrapper>();
         foreach (var entry in scoreResponse.Results)
         {
-            PlayerLeaderboardData playerLeaderboardData = JsonConvert.DeserializeObject<PlayerLeaderboardData>(entry.Metadata);
-            playerLeaderboardData.rankedPosition = entry.Rank;
-            playersData.Add(playerLeaderboardData);
+            PlayerLeaderboardWrapper playerLeaderboardWrapper = new PlayerLeaderboardWrapper(
+                JsonConvert.DeserializeObject<Dictionary<string, string>>(entry.Metadata)["username"],
+                (int)entry.Score,
+                entry.Rank);
+            playerLeaderboardWrapper.rankedPosition = entry.Rank;
+            playersData.Add(playerLeaderboardWrapper);
         }
+
         OnPlayersDataLoaded.Invoke(playersData);
     }
 }

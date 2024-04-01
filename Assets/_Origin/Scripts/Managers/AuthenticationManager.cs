@@ -40,7 +40,6 @@ public class AuthenticationManager : MonoBehaviour
         {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-
             isAuthenticated = AuthenticationService.Instance.IsSignedIn;
             OnAuthenticated.Invoke();
         }

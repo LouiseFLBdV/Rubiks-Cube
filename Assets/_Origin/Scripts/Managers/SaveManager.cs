@@ -4,8 +4,9 @@ using UnityEngine.Events;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
-    public UnityEvent onDataSaved;
-    public UnityEvent onNoSaveData;
+    public UnityEvent onDataSaved = new UnityEvent();
+    public UnityEvent onNoSaveData = new UnityEvent();
+    public UnityEvent onLoadedSaveData = new UnityEvent();
 
     void Awake()
     {
@@ -23,24 +24,32 @@ public class SaveManager : MonoBehaviour
 
     private void Start()
     {
+        PlayerData.Instance.onPlayerMoneyChanged.AddListener(SaveData);
+        PlayerData.Instance.onPlayerUsernameChanged.AddListener(SaveData);
+        PlayerData.Instance.onPlayerBestScoreChanged.AddListener(SaveData);
         Initialize();
     }
 
     private void Initialize()
     {
-        PlayerData.Instance.UserName = PlayerPrefs.GetString("userName", "player");
-        PlayerData.Instance.BestScore = PlayerPrefs.GetInt("bestScore", 0);
-        PlayerData.Instance.Money = PlayerPrefs.GetInt("userMoney", 0);
-        if (PlayerData.Instance.UserName == "player" && PlayerData.Instance.BestScore == 0 && PlayerData.Instance.Money == 0)
+        if (PlayerPrefs.HasKey("username"))
         {
-            Debug.Log(PlayerPrefs.GetString("userName", "player"));
+            PlayerData.Instance.SetPlayerData(PlayerPrefs.GetString("username", "player"),
+                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("userMoney", 0));
+        }
+        else
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerData.Instance.SetPlayerData(PlayerPrefs.GetString("username", "player"),
+                PlayerPrefs.GetInt("bestScore", 0), PlayerPrefs.GetInt("userMoney", 0));
             onNoSaveData?.Invoke();
         }
+        onLoadedSaveData?.Invoke();
     }
 
     public void SaveData()
     {
-        PlayerPrefs.SetString("userName", PlayerData.Instance.UserName);
+        PlayerPrefs.SetString("username", PlayerData.Instance.UserName);
         PlayerPrefs.SetInt("bestScore", PlayerData.Instance.BestScore);
         PlayerPrefs.SetInt("userMoney", PlayerData.Instance.Money);
         PlayerPrefs.Save();

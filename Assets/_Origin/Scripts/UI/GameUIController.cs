@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RubicksCubeCreator;
 using UnityEngine;
@@ -8,11 +9,12 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private float rotateCooldown = 3;
     [SerializeField] private LayerMask m_InputLayerMask = Physics.DefaultRaycastLayers;
     [SerializeField] private Text userName;
+    [SerializeField] private Text money;
     [SerializeField] private List<GameObject> popupList;
     private Cube m_Cube;
     private Camera m_Camera;
 
-    void Start()
+    private void Start()
     {
         m_Camera = FindObjectOfType<Camera>();
         m_Cube = FindObjectOfType<Cube>();
@@ -20,8 +22,15 @@ public class GameUIController : MonoBehaviour
         {
             InvokeRepeating("InvokeRandomMove", 0f, rotateCooldown);
         }
+        SaveManager.Instance.onLoadedSaveData.AddListener(RenderMoney);
+        PlayerData.Instance.onPlayerMoneyChanged.AddListener(RenderMoney);
     }
 
+    private void RenderMoney()
+    {
+        money.text = PlayerData.Instance.Money.ToString();
+    }
+    
     void InvokeRandomMove()
     {
         if (m_Cube != null && m_Cube.gameObject.activeInHierarchy)
@@ -81,6 +90,8 @@ public class GameUIController : MonoBehaviour
 
     void OnDestroy()
     {
-        CancelInvoke("InvokeRandomMove"); // Остановка повторяющегося вызова при уничтожении объекта
+        CancelInvoke("InvokeRandomMove");
+        SaveManager.Instance.onLoadedSaveData.RemoveListener(RenderMoney);
+        PlayerData.Instance.onPlayerMoneyChanged.RemoveListener(RenderMoney);
     }
 }
